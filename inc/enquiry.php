@@ -276,7 +276,7 @@ function sc_enquiry_handle() {
 			$to,
 			sprintf(
 				/* translators: 1: sender name, 2: subject */
-				__( 'Website enquiry -- %1$s (%2$s)', 'smilecreative' ),
+				__( 'Website enquiry — %1$s (%2$s)', 'smilecreative' ),
 				$data['name'],
 				'' !== $data['subject'] ? $data['subject'] : __( 'general', 'smilecreative' )
 			),
@@ -308,7 +308,7 @@ add_action( 'template_redirect', 'sc_enquiry_handle' );
  * both untrue and a reason for them to go elsewhere.
  */
 function sc_enquiry_thanks() {
-	return __( 'Thank you -- that has come through. We will come back to you, usually the same working day.', 'smilecreative' );
+	return __( 'Thank you — that has come through. We will come back to you, usually the same working day.', 'smilecreative' );
 }
 
 /**

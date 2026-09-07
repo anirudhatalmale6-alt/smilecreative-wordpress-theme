@@ -134,7 +134,7 @@ function sc_project_meta_render( $post ) {
 
 	printf(
 		'<p class="description">%s</p>',
-		esc_html__( 'The featured image should be a screenshot of the live site at full width -- no desk mockup, no frame, no watermark. The old portfolio used the same stock iMac photograph for all 55 projects and the screen was too small to read any of them.', 'smilecreative' )
+		esc_html__( 'The featured image should be a screenshot of the live site at full width — no desk mockup, no frame, no watermark. The old portfolio used the same stock iMac photograph for all 55 projects and the screen was too small to read any of them.', 'smilecreative' )
 	);
 }
 
