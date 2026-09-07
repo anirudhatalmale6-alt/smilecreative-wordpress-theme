@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $sc_steps = array(
 	array( __( 'Takes 2 minutes', 'smilecreative' ), __( 'Send us your address', 'smilecreative' ), __( 'Your current web address and a line about what you would like to be better.', 'smilecreative' ) ),
-	array( __( 'Within 48 hours', 'smilecreative' ), __( 'We design your homepage', 'smilecreative' ), __( 'A real concept, desktop and mobile, with copy written for the new layout. Not a wireframe.', 'smilecreative' ) ),
+	array( __( 'Usually within 24 hours', 'smilecreative' ), __( 'We design your homepage', 'smilecreative' ), __( 'A real concept, desktop and mobile, with copy written for the new layout. Not a wireframe.', 'smilecreative' ) ),
 	array( __( 'No strings', 'smilecreative' ), __( 'You keep it either way', 'smilecreative' ), __( 'Like it and we can talk about building it. Do not, and the concept is still yours.', 'smilecreative' ) ),
 );
 ?>
@@ -36,7 +36,7 @@ $sc_steps = array(
 				<span class="label"><?php esc_html_e( 'Before you spend anything', 'smilecreative' ); ?></span>
 				<h2 class="big" style="margin-top:.8rem"><?php esc_html_e( 'We will redesign your homepage for free.', 'smilecreative' ); ?></h2>
 				<p class="lead" style="margin-top:1.2rem">
-					<?php esc_html_e( 'Send us your address and we will send back a proper concept of your homepage within 48 hours — desktop and mobile, with the copy written. No payment, no obligation, and it is yours to keep whatever you decide.', 'smilecreative' ); ?>
+					<?php esc_html_e( 'Send us your address and we will send back a proper concept of your homepage — desktop and mobile, with the copy written. Usually within 24 hours, always within two working days. No payment, no obligation, and it is yours to keep whatever you decide.', 'smilecreative' ); ?>
 				</p>
 				<p class="lead" style="margin-top:1.2rem">
 					<?php esc_html_e( 'We would rather show you the work than tell you about it. If the concept is not right, you have lost nothing and we have lost a couple of days — which is the correct way round.', 'smilecreative' ); ?>

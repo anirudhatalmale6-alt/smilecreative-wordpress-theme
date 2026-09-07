@@ -4,7 +4,7 @@ Theme URI: https://smilecreative.agency/
 Author: Smile Creative
 Author URI: https://smilecreative.agency/
 Description: Hand-built theme for Smile Creative. No page builder, no addon plugins, no licence key to lapse -- the design lives in this stylesheet rather than in generated per-page CSS, which is what removes the whole class of fault that took the old site down twice in August.
-Version: 1.1.0
+Version: 1.2.0
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -377,3 +377,21 @@ footer{border-top:1px solid var(--line);padding:2.6rem 0;font-size:.85rem;color:
 .shot{aspect-ratio:1120/760}
 .shot img{width:100%;height:100%;object-fit:cover}
 .clogo img{aspect-ratio:2/1;object-fit:contain}
+
+/* ---------------------------------------------------------------------------
+   Landing page (Template Name: Free homepage redesign).
+   No nav, form above the fold, and the phone kept visible -- a proportion of
+   people who will not fill in a form will still ring.
+   --------------------------------------------------------------------------- */
+.is-lander .hbar{gap:1.5rem}
+.is-lander .hbar .htel{margin-left:auto}
+.lander-hero{padding:clamp(3rem,7vw,5.5rem) 0 clamp(3rem,6vw,5rem)}
+.lander-hero h1{font-family:Fraunces,Georgia,serif;font-weight:600;line-height:1.04;
+  letter-spacing:-.012em;font-size:clamp(2.2rem,4.6vw,3.6rem);margin:.9rem 0 0;max-width:15ch}
+.lander-hero h1 em{font-style:italic;color:var(--gold);font-weight:400}
+.lander-hero .form{margin-top:0}
+.is-lander .arrows{display:none}
+@media(max-width:900px){
+  /* Form first on a phone. The copy has already done its job in the advert. */
+  .lander-hero .split{display:flex;flex-direction:column-reverse}
+}
