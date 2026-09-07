@@ -254,7 +254,7 @@ function sc_enquiry_handle() {
 		);
 
 		$body = sprintf(
-			"%s\n\nName:    %s\nEmail:   %s\nPhone:   %s\nAbout:   %s\n\n%s\n\n---\nSent from %s\nStored as enquiry #%d -- it is in the site database whether or not this email arrives.\n",
+			"%s\n\nName:    %s\nEmail:   %s\nPhone:   %s\nAbout:   %s\n\n%s\n\n---\nSent from %s\nStored as enquiry #%d — it is in the site database whether or not this email arrives.\n",
 			__( 'New enquiry from the website.', 'smilecreative' ),
 			$data['name'],
 			$data['email'],
