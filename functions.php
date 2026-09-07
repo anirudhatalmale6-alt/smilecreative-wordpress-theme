@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SC_VERSION', '1.4.0' );
+define( 'SC_VERSION', '1.5.0' );
 define( 'SC_DIR', get_template_directory() );
 define( 'SC_URI', get_template_directory_uri() );
 
@@ -164,7 +164,9 @@ add_action( 'after_setup_theme', 'sc_editor_assets' );
  * content completely and draws its own markup.
  */
 function sc_theme_owns_view() {
-	return is_front_page() || is_404() || is_page_template( 'page-redesign.php' );
+	return is_front_page() || is_404()
+		|| is_page_template( 'page-redesign.php' )
+		|| is_page_template( 'page-support.php' );
 }
 
 /**

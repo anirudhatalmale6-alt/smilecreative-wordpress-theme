@@ -98,3 +98,49 @@
     msg.scrollIntoView({ block: 'center' });
   }
 })();
+
+/* ---------------------------------------------------------------------------
+   Aftercare page: monthly / yearly prices.
+
+   The numbers for both periods are already in the HTML as data attributes, so
+   this only swaps which one is displayed -- with JavaScript off the page still
+   shows the monthly price and every plan and feature is still readable. The old
+   page hid its yearly table behind a script and showed nothing at all without
+   it.
+   --------------------------------------------------------------------------- */
+(function () {
+  var bills = document.querySelectorAll('.bill-btn');
+  if (!bills.length) { return; }
+
+  var nums = document.querySelectorAll('.plan-num');
+  var pers = document.querySelectorAll('.plan-per');
+
+  Array.prototype.forEach.call(bills, function (btn) {
+    btn.addEventListener('click', function () {
+      var yearly = btn.getAttribute('data-bill') === 'yearly';
+
+      Array.prototype.forEach.call(bills, function (b) { b.classList.remove('is-on'); });
+      btn.classList.add('is-on');
+
+      Array.prototype.forEach.call(nums, function (n) {
+        var v = n.getAttribute(yearly ? 'data-yearly' : 'data-monthly');
+        if (v) { n.textContent = v; }
+      });
+      Array.prototype.forEach.call(pers, function (p) {
+        p.textContent = yearly ? '/year' : '/month';
+      });
+    });
+  });
+
+  /* Carry the chosen plan into the enquiry form, so an enquiry from this page
+     arrives saying which plan they clicked rather than "general". */
+  Array.prototype.forEach.call(document.querySelectorAll('[data-plan]'), function (a) {
+    a.addEventListener('click', function () {
+      var msg = document.querySelector('#ask textarea');
+      var plan = a.getAttribute('data-plan');
+      if (msg && !msg.value) {
+        msg.value = 'I am interested in the ' + plan + ' plan. ';
+      }
+    });
+  });
+}());

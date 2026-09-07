@@ -8,7 +8,7 @@
 $sc_q = new WP_Query(
 	array(
 		'post_type'      => 'sc_project',
-		'posts_per_page' => 6,
+		'posts_per_page' => 12,
 		'orderby'        => 'menu_order date',
 		'order'          => 'ASC',
 		'no_found_rows'  => true,
@@ -78,8 +78,8 @@ $sc_q = new WP_Query(
 		$more = new WP_Query(
 			array(
 				'post_type'      => 'sc_project',
-				'posts_per_page' => 20,
-				'offset'         => 6,
+				'posts_per_page' => 30,
+				'offset'         => 12,
 				'orderby'        => 'menu_order date',
 				'order'          => 'ASC',
 				'no_found_rows'  => true,

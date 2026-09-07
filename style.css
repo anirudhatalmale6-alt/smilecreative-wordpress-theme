@@ -4,7 +4,7 @@ Theme URI: https://smilecreative.agency/
 Author: Smile Creative
 Author URI: https://smilecreative.agency/
 Description: Hand-built theme for Smile Creative. No page builder, no addon plugins, no licence key to lapse -- the design lives in this stylesheet rather than in generated per-page CSS, which is what removes the whole class of fault that took the old site down twice in August.
-Version: 1.4.0
+Version: 1.5.0
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -143,6 +143,9 @@ nav a:hover{color:var(--cream);border-color:var(--gold)}
   padding-left:clamp(1.25rem,4vw,2.5rem);padding-right:clamp(1.25rem,4vw,2.5rem);
   scrollbar-width:thin}
 .card{flex:0 0 min(560px,84vw);scroll-snap-align:start}
+/* The whole card is a link, so without this every title and caption inside it
+   picks up the browser's default underline. */
+a.card,a.card:hover{text-decoration:none;color:inherit}
 .shot{overflow:hidden;background:var(--ink-2);border:1px solid var(--line)}
 .shot img{width:100%;transition:transform .7s var(--ease)}
 .card:hover .shot img{transform:scale(1.035)}
@@ -437,3 +440,66 @@ footer{border-top:1px solid var(--line);padding:clamp(3rem,6vw,4.5rem) 0 0;
   border-top:1px solid var(--line);font-size:.82rem}
 .fbar a{color:inherit}
 .fbar a:hover{color:var(--gold)}
+
+/* ---------------------------------------------------------------------------
+   Aftercare & hosting (page-support.php)
+   The last page that was still an Elementor layout. Everything here is built
+   from the same tokens as the rest of the site so it cannot drift again.
+   --------------------------------------------------------------------------- */
+
+.why4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(1.4rem,3vw,2.6rem);
+  margin-top:2.8rem}
+@media(max-width:1000px){.why4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.why4{grid-template-columns:1fr}}
+.why4-item{border-top:1px solid var(--line-2);padding-top:1.2rem}
+.why4-n{font-family:Fraunces,Georgia,serif;font-size:1.3rem;color:var(--gold);display:block;
+  margin-bottom:.7rem}
+.why4-item h3{font-size:1.05rem;margin-bottom:.5rem}
+.why4-item p{font-size:.93rem}
+
+/* A tick list. The old page drew these with a green emoji, which is a different
+   green on every operating system and a plain rectangle on a few of them. */
+.ticks{list-style:none;margin:0;padding:0}
+.ticks li{position:relative;padding-left:1.7rem;margin-bottom:.7rem;color:var(--cream-2);
+  font-size:.95rem}
+.ticks li::before{content:"";position:absolute;left:0;top:.42em;width:.55rem;height:.3rem;
+  border-left:2px solid var(--gold);border-bottom:2px solid var(--gold);
+  transform:rotate(-45deg)}
+
+.billing{display:inline-flex;border:1px solid var(--line-2);margin-top:2.4rem}
+.bill-btn{background:none;border:0;color:var(--cream-2);cursor:pointer;
+  font-family:Archivo;font-size:.72rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;padding:.75rem 1.4rem;transition:background .25s,color .25s}
+.bill-btn.is-on{background:var(--gold);color:var(--ink)}
+
+.plans{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.2rem;margin-top:2rem;
+  align-items:start}
+@media(max-width:1080px){.plans{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.plans{grid-template-columns:1fr}}
+.plan{border:1px solid var(--line);background:var(--ink);padding:1.6rem 1.4rem 1.8rem;
+  position:relative;display:flex;flex-direction:column;height:100%}
+.plan-pop{border-color:var(--gold)}
+.plan-flag{position:absolute;top:0;right:0;background:var(--gold);color:var(--ink);
+  font-size:.6rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  padding:.35rem .6rem}
+.plan h3{font-size:1.35rem}
+.plan-sub{font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--cream-3);display:block;margin-top:.3rem}
+.plan-price{margin:1.1rem 0 1.4rem;display:flex;align-items:baseline;gap:.1rem}
+.plan-cur{font-family:Fraunces,Georgia,serif;font-size:1.3rem;color:var(--gold)}
+.plan-num{font-family:Fraunces,Georgia,serif;font-size:2.3rem;color:var(--cream);
+  line-height:1}
+.plan-per{font-size:.78rem;color:var(--cream-3);margin-left:.35rem}
+.plan .ticks{flex:1 0 auto;margin-bottom:1.6rem}
+.plan .ticks li{font-size:.87rem;margin-bottom:.55rem}
+.plan .btn{justify-content:center;width:100%;font-size:.7rem;padding:.8rem 1rem}
+
+/* The FAQ uses <details> so it opens with no JavaScript at all. */
+.qa details{padding:1.3rem 0;border-bottom:1px solid var(--line)}
+.qa summary{font-family:Fraunces,Georgia,serif;font-size:1.08rem;cursor:pointer;
+  list-style:none;display:flex;justify-content:space-between;gap:1.5rem;align-items:baseline}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::after{content:"+";color:var(--gold);font-family:Archivo;font-size:1.2rem;
+  flex:none;transition:transform .25s var(--ease)}
+.qa details[open] summary::after{transform:rotate(45deg)}
+.qa details p{margin-top:.9rem}
