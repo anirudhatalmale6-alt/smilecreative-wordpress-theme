@@ -84,8 +84,21 @@ $sc_footer_services = array(
 	<div class="wrap fbar">
 		<span>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?>.</span>
 		<span class="faint">
-			<?php esc_html_e( 'Trading status line goes here — needs confirming', 'smilecreative' ); ?>
-			&nbsp;·&nbsp;
+			<?php
+			/*
+			 * Only printed once there is something true to print. The first cut
+			 * carried the words "Trading status line goes here" as a reminder to
+			 * me, and went live saying exactly that -- a placeholder in a footer
+			 * is a placeholder on every page of the site. Set sc_trading in the
+			 * Customizer (e.g. the limited company name and number, or the sole
+			 * trader line) and it appears.
+			 */
+			$sc_trading = trim( (string) get_theme_mod( 'sc_trading', '' ) );
+			if ( '' !== $sc_trading ) :
+				?>
+				<?php echo esc_html( $sc_trading ); ?>
+				&nbsp;·&nbsp;
+			<?php endif; ?>
 			<a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>"><?php esc_html_e( 'Privacy', 'smilecreative' ); ?></a>
 		</span>
 	</div>

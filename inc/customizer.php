@@ -38,6 +38,7 @@ function sc_customizer( $wp_customize ) {
 		'enquiry_from' => array( __( 'Enquiries are sent FROM', 'smilecreative' ), 'email', __( 'Must be an address on this domain. If this is set to the visitor\'s address instead, the mail fails authentication at the far end and is discarded with no bounce -- that is the most common cause of forms that silently stop delivering.', 'smilecreative' ) ),
 		'founded'      => array( __( 'Trading since', 'smilecreative' ), 'text', '' ),
 		'first_site'   => array( __( 'First website built', 'smilecreative' ), 'text', '' ),
+		'trading'      => array( __( 'Trading status, for the footer', 'smilecreative' ), 'text', __( 'Printed small at the foot of every page, or left off entirely if this is blank. Example: "Smile Creative is a trading name of ... , registered in Northern Ireland, NI000000".', 'smilecreative' ) ),
 	);
 
 	foreach ( $fields as $key => $f ) {

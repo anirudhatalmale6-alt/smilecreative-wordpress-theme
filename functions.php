@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SC_VERSION', '1.3.0' );
+define( 'SC_VERSION', '1.4.0' );
 define( 'SC_DIR', get_template_directory() );
 define( 'SC_URI', get_template_directory_uri() );
 
@@ -155,12 +155,123 @@ function sc_editor_assets() {
 add_action( 'after_setup_theme', 'sc_editor_assets' );
 
 /**
+ * Is the current view drawn entirely by this theme's own templates?
+ *
+ * Used to decide when the page builder's assets are dead weight. The homepage
+ * is the case that matters: WordPress still treats it as page #799, which was
+ * built in Elementor, so Elementor still enqueues that page's generated CSS and
+ * still adds its body classes -- even though front-page.php ignores the stored
+ * content completely and draws its own markup.
+ */
+function sc_theme_owns_view() {
+	return is_front_page() || is_404() || is_page_template( 'page-redesign.php' );
+}
+
+/**
+ * Shed the page builder's front-end assets on the pages this theme draws.
+ *
+ * Not a tidy-up. Elementor's per-page stylesheet for the old homepage contains
+ *
+ *     body.elementor-page-799{background-color:#FFFFFF}
+ *
+ * which is one class more specific than `body{background:var(--ink)}`, so it
+ * won on the live site: a white page with cream text on it, which is what
+ * Brendan photographed. Stylesheets for a layout that is no longer rendered can
+ * only ever do this kind of harm, so they come off.
+ *
+ * Matched on the registered FILE PATH, not on the handle. Handle prefixes were
+ * the obvious way to do this and they measured wrong: Elementor's per-widget
+ * styles register as `widget-heading`, `widget-image`, `e-swiper` and so on,
+ * which share no prefix with anything, and a list of them would go stale with
+ * every release. The path is the one thing that cannot lie about which plugin
+ * a file came from.
+ *
+ * It also runs twice -- once after the normal enqueue pass, and again
+ * immediately before the tags are printed -- because Elementor adds several of
+ * these while the head is already being rendered, which is after
+ * wp_enqueue_scripts has finished. Anything NOT in this list (the cookie
+ * banner, analytics, the Kira widget) is left alone deliberately.
+ */
+function sc_shed_builder_assets() {
+	if ( is_admin() || ! sc_theme_owns_view() ) {
+		return;
+	}
+
+	$paths = array(
+		'/plugins/elementor/',
+		'/plugins/elementor-pro/',
+		'/plugins/pro-elements/',
+		'/plugins/elementskit-lite/',
+		'/plugins/essential-addons-for-elementor-lite/',
+		'/plugins/royal-elementor-addons/',
+		'/plugins/header-footer-elementor/',
+		'/plugins/premium-addons-for-elementor/',
+		'/uploads/elementor/',   // generated per-page CSS and the Google fonts it copied
+		'/plugins/formidable/',  // form plugins: this theme's enquiry form is its own
+		'/plugins/ninja-forms/',
+	);
+
+	foreach ( array( wp_styles(), wp_scripts() ) as $reg ) {
+		foreach ( (array) $reg->queue as $handle ) {
+			$src = isset( $reg->registered[ $handle ] ) ? (string) $reg->registered[ $handle ]->src : '';
+			if ( '' === $src ) {
+				continue;
+			}
+			foreach ( $paths as $needle ) {
+				if ( false !== strpos( $src, $needle ) ) {
+					$reg->dequeue( $handle );
+					break;
+				}
+			}
+		}
+	}
+}
+add_action( 'wp_enqueue_scripts', 'sc_shed_builder_assets', 999 );
+add_action( 'wp_print_styles', 'sc_shed_builder_assets', 0 );
+add_action( 'wp_print_footer_scripts', 'sc_shed_builder_assets', 0 );
+
+/**
+ * Swallow shortcodes whose plugin is no longer switched on.
+ *
+ * WordPress prints an unregistered shortcode as literal text, so the moment the
+ * booking plugin was deactivated the raw string
+ * `[koalendar link="https://koalendar.com/e/..."]` appeared at the foot of the
+ * page for every visitor. A page should never show its own plumbing, so any of
+ * these that survives in old content now renders as nothing at all.
+ */
+function sc_neutralise_orphan_shortcodes() {
+	foreach ( array( 'koalendar' ) as $tag ) {
+		if ( ! shortcode_exists( $tag ) ) {
+			add_shortcode( $tag, '__return_empty_string' );
+		}
+	}
+}
+add_action( 'init', 'sc_neutralise_orphan_shortcodes', 99 );
+
+/**
  * Body classes used by the stylesheet.
+ *
+ * Also strips the builder's own body classes on the pages this theme draws, so
+ * that a stylesheet arriving from somewhere I have not thought of -- a cached
+ * copy, a plugin that inlines its critical CSS -- still has nothing to hook on
+ * to. The dequeue above removes the stylesheet; this removes the target.
  */
 function sc_body_class( $classes ) {
 	if ( is_front_page() ) {
 		$classes[] = 'is-home';
 	}
+
+	if ( sc_theme_owns_view() ) {
+		$classes = array_values(
+			array_filter(
+				$classes,
+				function ( $c ) {
+					return 0 !== strpos( $c, 'elementor-' ) && 0 !== strpos( $c, 'ehf-' );
+				}
+			)
+		);
+	}
+
 	return $classes;
 }
-add_filter( 'body_class', 'sc_body_class' );
+add_filter( 'body_class', 'sc_body_class', 999 ); // 999: Elementor adds its own classes at the default priority, so a filter at 10 is overwritten a moment later.

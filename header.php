@@ -41,7 +41,15 @@
 					array(
 						'theme_location' => 'primary',
 						'container'      => false,
-						'items_wrap'     => '%3$s',
+						/*
+						 * Keep the <ul>. Stripping it with '%3$s' left bare
+						 * <li> elements sitting directly inside <nav>, which
+						 * browsers still draw as list items -- the live header
+						 * showed a bullet before every link, and on the
+						 * Elementor pages the list stacked vertically over the
+						 * logo. The wrapper is styled in style.css instead.
+						 */
+						'items_wrap'     => '<ul class="nav-list">%3$s</ul>',
 						'depth'          => 1,
 						'fallback_cb'    => false,
 					)
