@@ -27,9 +27,15 @@ function sc_redirect_map() {
 			'/about/'             => '/#who',
 			'/team/'              => '/#who',
 			'/contact/'           => '/#contact',
+			// Still LIVE at the time of writing -- this only fires on a 404, so
+			// it sits dormant until the page is actually deleted.
 			'/social-media/'      => '/#services',
-			'/portfolio/'         => '/#work',
-			'/portfolio-archive/' => '/#work',
+			'/lander01/'          => '/#redesign',
+			// The theme registers a real archive at /work/ (the sc_project post
+			// type), so these go to the full list rather than to a homepage
+			// anchor that only shows the first six.
+			'/portfolio/'         => '/work/',
+			'/portfolio-archive/' => '/work/',
 			'/post-list/'         => '/',
 			'/booking/'           => '/#contact',
 		)
