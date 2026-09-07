@@ -50,6 +50,46 @@
     });
   });
 
+  /* ---- Legacy anchors -------------------------------------------------
+     The old site used capitalised ids -- the main menu pointed at
+     "/#Contact", and there are Facebook posts, bookmarks and third-party
+     links out there carrying it. Fragment identifiers are CASE-SENSITIVE, so
+     "#Contact" silently does nothing against a section with id="contact":
+     the page loads at the top and the visitor assumes the link is broken.
+     Match case-insensitively and scroll there instead. */
+  var lastJump = -1;
+  function resolveHash() {
+    var raw = window.location.hash.replace(/^#/, '');
+    if (!raw) return;
+    if (document.getElementById(raw)) return;         // exact match, nothing to do
+    /* Sections the old site had that this one folded into another. Same idea
+       as the 301s in inc/redirects.php, for the in-page equivalent. */
+    var alias = { team: 'who', about: 'who', portfolio: 'work', industries: 'services',
+                  booking: 'contact', support: 'care' };
+    var want = raw.toLowerCase();
+    if (alias[want]) want = alias[want];
+    var hit = null;
+    var all = document.querySelectorAll('[id]');
+    for (var i = 0; i < all.length; i++) {
+      if (all[i].id.toLowerCase() === want) { hit = all[i]; break; }
+    }
+    if (!hit) return;
+    // Only re-scroll if the visitor has not moved since OUR last jump --
+    // otherwise a late retry yanks the page out from under someone reading.
+    if (lastJump > -1 && Math.abs(window.scrollY - lastJump) > 4) return;
+    hit.scrollIntoView();
+    lastJump = Math.round(window.scrollY);
+  }
+  /* Run repeatedly, not once. This script is deferred, so the first call
+     happens before the lazy images below the fold have laid out -- measured
+     610px short on the first attempt, because the page grew underneath the
+     jump. Retrying settles it, and the guard above means a visitor who has
+     started scrolling is left alone. */
+  resolveHash();
+  window.addEventListener('load', resolveHash);
+  [250, 750, 1500].forEach(function (ms) { setTimeout(resolveHash, ms); });
+  window.addEventListener('hashchange', function () { lastJump = -1; resolveHash(); });
+
   /* ---- Scroll the confirmation into view -------------------------------
      After a post the page reloads at the top and the "thank you" is halfway
      down, so it reads as though nothing happened. */

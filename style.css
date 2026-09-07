@@ -4,7 +4,7 @@ Theme URI: https://smilecreative.agency/
 Author: Smile Creative
 Author URI: https://smilecreative.agency/
 Description: Hand-built theme for Smile Creative. No page builder, no addon plugins, no licence key to lapse -- the design lives in this stylesheet rather than in generated per-page CSS, which is what removes the whole class of fault that took the old site down twice in August.
-Version: 1.0.0
+Version: 1.1.0
 Requires at least: 6.0
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -349,3 +349,31 @@ footer{border-top:1px solid var(--line);padding:2.6rem 0;font-size:.85rem;color:
   .hero-scrim{background:linear-gradient(180deg,rgba(11,10,8,.90) 0%,
               rgba(11,10,8,.72) 55%,rgba(11,10,8,.55) 100%)}
 }
+
+/* ---------------------------------------------------------------------------
+   The free homepage redesign offer.
+   Placed after the work gallery on purpose -- read cold it is a gimmick, read
+   after six real client sites it is confidence.
+   --------------------------------------------------------------------------- */
+.mockup .mk-head{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  gap:clamp(2rem,6vw,5rem);align-items:start}
+@media(max-width:900px){.mockup .mk-head{grid-template-columns:1fr}}
+.mockup .cta{margin-top:2rem}
+.mk-steps{list-style:none;margin:0;padding:0;counter-reset:none}
+.mk-steps li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:1.2rem;
+  align-items:start;padding:1.4rem 0;border-bottom:1px solid var(--line)}
+.mk-steps li:first-child{border-top:1px solid var(--line)}
+.mk-steps .n{font-family:Fraunces,Georgia,serif;font-size:1.5rem;color:var(--gold);
+  line-height:1.1}
+.mk-steps .when{font-size:.68rem;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.4rem}
+.mk-steps h3{font-size:1.1rem;margin-bottom:.35rem}
+.mk-steps p{font-size:.93rem}
+
+/* Reserve the card's shape before the image arrives. the_post_thumbnail()
+   already emits width and height, but an editor pasting an <img> by hand does
+   not -- and a gallery that grows as images load moves every anchor below it,
+   which lands an in-page link hundreds of pixels short of its target. */
+.shot{aspect-ratio:1120/760}
+.shot img{width:100%;height:100%;object-fit:cover}
+.clogo img{aspect-ratio:2/1;object-fit:contain}

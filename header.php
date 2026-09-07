@@ -54,6 +54,7 @@
 				 */
 				$fallback = array(
 					'#work'     => __( 'Work', 'smilecreative' ),
+					'#redesign' => __( 'Free redesign', 'smilecreative' ),
 					'#reviews'  => __( 'Reviews', 'smilecreative' ),
 					'#services' => __( 'Services', 'smilecreative' ),
 					'#care'     => __( 'Aftercare', 'smilecreative' ),
@@ -68,7 +69,7 @@
 		</nav>
 
 		<?php echo wp_kses_post( sc_tel_link( 'htel' ) ); ?>
-		<a class="btn" href="<?php echo esc_url( home_url( '/#contact' ) ); ?>"><?php esc_html_e( 'Start a project', 'smilecreative' ); ?></a>
+		<a class="btn" href="<?php echo esc_url( home_url( '/#redesign' ) ); ?>"><?php esc_html_e( 'Free redesign', 'smilecreative' ); ?></a>
 	</div>
 </header>
 

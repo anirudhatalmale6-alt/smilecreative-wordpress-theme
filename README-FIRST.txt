@@ -78,3 +78,25 @@ ones that just say "client work".
 The warm wash behind it is standing in for a PHOTOGRAPH. That is the layer
 the reference site uses and it is where the warmth comes from -- the geometry
 on its own is cold. It is waiting for one of the images we discussed.
+
+-------------------------------------------------------------------------
+v1.1.0
+
+THE FREE HOMEPAGE REDESIGN OFFER is now on the homepage, as its own band
+straight after the work gallery, and it is the primary call to action in
+both the hero and the header.
+
+It is placed AFTER the work on purpose. "Free homepage redesign" read cold
+is a gimmick; read straight after six real client sites it is confidence.
+
+It uses the SAME form, with "A free homepage redesign" added as a subject.
+No second form and no second inbox.
+
+LEGACY ANCHORS. Your old menu pointed at /#Contact with a capital C, and
+fragment identifiers are case-sensitive -- "#Contact" does nothing against
+a section with id="contact". Any old Facebook post, bookmark or directory
+link carrying one would have landed at the top of the page and looked
+broken. site.js now matches case-insensitively, and maps the sections that
+were folded into others: #Team and #About go to the About block,
+#Portfolio to the work, #Industries to services, #Booking to contact,
+#Support to aftercare.

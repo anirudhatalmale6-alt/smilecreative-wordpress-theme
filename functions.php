@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SC_VERSION', '1.0.0' );
+define( 'SC_VERSION', '1.1.0' );
 define( 'SC_DIR', get_template_directory() );
 define( 'SC_URI', get_template_directory_uri() );
 

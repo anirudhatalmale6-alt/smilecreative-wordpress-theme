@@ -154,6 +154,7 @@ function sc_enquiry_subjects() {
 	return apply_filters(
 		'sc_enquiry_subjects',
 		array(
+			__( 'A free homepage redesign', 'smilecreative' ),
 			__( 'A new website', 'smilecreative' ),
 			__( 'An existing website that needs work', 'smilecreative' ),
 			__( 'Logo or branding', 'smilecreative' ),

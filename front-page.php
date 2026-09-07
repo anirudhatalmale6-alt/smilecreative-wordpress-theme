@@ -52,7 +52,11 @@ get_header();
 				?>
 			</p>
 			<div class="cta rise">
-				<a class="btn" href="#contact"><?php esc_html_e( 'Start a project', 'smilecreative' ); ?></a>
+				<?php /* The free concept leads. On a page arguing "we would rather lose
+				         the job than wear you down", the primary CTA should be the
+				         low-commitment one -- "Start a project" asks for a decision
+				         the visitor has not got enough to make yet. */ ?>
+				<a class="btn" href="#redesign"><?php esc_html_e( 'Get a free homepage redesign', 'smilecreative' ); ?></a>
 				<a class="btn ghost" href="#work"><?php esc_html_e( 'See recent work', 'smilecreative' ); ?></a>
 			</div>
 		</div>
@@ -69,6 +73,7 @@ get_header();
 
 <?php get_template_part( 'template-parts/clients' ); ?>
 <?php get_template_part( 'template-parts/work' ); ?>
+<?php get_template_part( 'template-parts/mockup' ); ?>
 <?php get_template_part( 'template-parts/reviews' ); ?>
 <?php get_template_part( 'template-parts/services' ); ?>
 <?php get_template_part( 'template-parts/care' ); ?>
