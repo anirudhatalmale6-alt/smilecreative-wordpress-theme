@@ -431,6 +431,11 @@ footer{border-top:1px solid var(--line);padding:clamp(3rem,6vw,4.5rem) 0 0;
 .fcol a:hover{color:var(--gold)}
 .fcol p{color:var(--cream-2);margin-bottom:.7rem;line-height:1.6}
 .flogo{width:min(190px,70%);height:auto;margin-bottom:1.2rem}
+/* Samson and Goliath, under the studio blurb in the first footer column.
+   width:100% with a max, not a fixed width -- the column is a grid track and a
+   fixed width would either overflow it on a narrow screen or leave the drawing
+   marooned at the top of a wide one. */
+.fcranes{width:100%;max-width:260px;height:auto;margin-top:1.7rem;opacity:.78}
 .fcol-brand p{max-width:34ch;font-size:.88rem}
 .fcontact a{border-bottom:1px solid var(--line-2)}
 .fcontact a:hover{border-color:var(--gold)}

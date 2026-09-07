@@ -37,6 +37,20 @@ $sc_footer_services = array(
 			<p class="muted">
 				<?php esc_html_e( 'Websites and print, built properly. A Belfast studio working for businesses across the UK and Ireland, and a few a good deal further.', 'smilecreative' ); ?>
 			</p>
+			<?php
+			/*
+			 * Samson and Goliath. Brendan's own illustration, sitting at 78% so it
+			 * reads as a nod rather than competing with the gold section labels --
+			 * his drawing is #f1b927, hue 43, against the site's #ffdb00 at hue 51,
+			 * and at full strength the two yellows argue with each other.
+			 *
+			 * aria-hidden and empty alt on purpose: it says nothing a screen reader
+			 * needs, and "Harland and Wolff cranes" read aloud in the footer of a
+			 * web studio is noise.
+			 */
+			?>
+			<img class="fcranes" src="<?php echo esc_url( SC_URI . '/assets/img/belfast-cranes.png' ); ?>"
+			     alt="" aria-hidden="true" width="520" height="346" loading="lazy" decoding="async">
 		</div>
 
 		<div class="fcol">
