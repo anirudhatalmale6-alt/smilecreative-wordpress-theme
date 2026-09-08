@@ -81,6 +81,7 @@ function sc_enquiry_form( $args = array() ) {
 		array(
 			'id'     => 'enquiry',
 			'button' => __( 'Send enquiry', 'smilecreative' ),
+			'steps'  => false,   // true = the two-step redesign form
 		)
 	);
 
@@ -113,6 +114,47 @@ function sc_enquiry_form( $args = array() ) {
 				<input type="text" id="sc_website" name="sc_website" tabindex="-1" autocomplete="off">
 			</div>
 
+			<?php if ( $args['steps'] ) : ?>
+			<?php
+			/*
+			 * Step one asks for nothing personal. That order is the whole point:
+			 * a visitor who has already ticked what is wrong with their site has
+			 * invested something, and finishes far more often than one met with
+			 * a name-and-email box on arrival. It is also the answer that makes
+			 * the concept worth building -- it says what to fix.
+			 */
+			?>
+			<fieldset class="step" data-step="1">
+				<span class="step-of"><?php esc_html_e( 'Step 1 of 2', 'smilecreative' ); ?></span>
+				<h3 class="step-q"><?php esc_html_e( 'What are you struggling most with on your current website?', 'smilecreative' ); ?></h3>
+				<p class="muted step-hint"><?php esc_html_e( 'Tick anything that applies.', 'smilecreative' ); ?></p>
+
+				<div class="pains">
+					<?php foreach ( sc_enquiry_pains() as $sc_i => $sc_pain ) : ?>
+						<label class="pain">
+							<input type="checkbox" name="sc_pain[]" value="<?php echo esc_attr( $sc_pain ); ?>">
+							<span><?php echo esc_html( $sc_pain ); ?></span>
+						</label>
+					<?php endforeach; ?>
+				</div>
+
+				<div class="field" style="margin-top:1.4rem">
+					<label for="<?php echo esc_attr( $args['id'] ); ?>-u"><?php esc_html_e( 'Your web address', 'smilecreative' ); ?></label>
+					<input id="<?php echo esc_attr( $args['id'] ); ?>-u" name="sc_url" type="text"
+						placeholder="yourbusiness.co.uk" value="<?php echo $val( 'url' ); ?>">
+				</div>
+
+				<div class="step-nav">
+					<button class="btn" type="button" data-step-next><?php esc_html_e( 'Continue', 'smilecreative' ); ?> &rarr;</button>
+				</div>
+			</fieldset>
+
+			<fieldset class="step" data-step="2">
+				<span class="step-of"><?php esc_html_e( 'Step 2 of 2', 'smilecreative' ); ?></span>
+				<h3 class="step-q"><?php esc_html_e( 'Where should we send your redesign?', 'smilecreative' ); ?></h3>
+				<p class="muted step-hint"><?php esc_html_e( 'Usually back within 24 hours, always within two working days.', 'smilecreative' ); ?></p>
+			<?php endif; ?>
+
 			<div class="field">
 				<label for="<?php echo esc_attr( $args['id'] ); ?>-n"><?php esc_html_e( 'Your name', 'smilecreative' ); ?> <span class="req">*</span></label>
 				<input id="<?php echo esc_attr( $args['id'] ); ?>-n" name="sc_name" type="text" required value="<?php echo $val( 'name' ); ?>">
@@ -125,6 +167,7 @@ function sc_enquiry_form( $args = array() ) {
 				<label for="<?php echo esc_attr( $args['id'] ); ?>-p"><?php esc_html_e( 'Phone', 'smilecreative' ); ?></label>
 				<input id="<?php echo esc_attr( $args['id'] ); ?>-p" name="sc_phone" type="tel" value="<?php echo $val( 'phone' ); ?>">
 			</div>
+			<?php if ( ! $args['steps'] ) : ?>
 			<div class="field">
 				<label for="<?php echo esc_attr( $args['id'] ); ?>-s"><?php esc_html_e( 'What is it about?', 'smilecreative' ); ?></label>
 				<select id="<?php echo esc_attr( $args['id'] ); ?>-s" name="sc_subject">
@@ -137,15 +180,50 @@ function sc_enquiry_form( $args = array() ) {
 				<label for="<?php echo esc_attr( $args['id'] ); ?>-m"><?php esc_html_e( 'Your message', 'smilecreative' ); ?></label>
 				<textarea id="<?php echo esc_attr( $args['id'] ); ?>-m" name="sc_message"><?php echo esc_textarea( isset( $old['message'] ) ? $old['message'] : '' ); ?></textarea>
 			</div>
-			<div>
+			<?php else : ?>
+				<input type="hidden" name="sc_subject" value="<?php echo esc_attr( sc_enquiry_subjects()[0] ); ?>">
+			<?php endif; ?>
+
+			<div class="step-nav">
+				<?php if ( $args['steps'] ) : ?>
+					<button class="btn ghost" type="button" data-step-back>&larr; <?php esc_html_e( 'Back', 'smilecreative' ); ?></button>
+				<?php endif; ?>
 				<button class="btn" type="submit"><?php echo esc_html( $args['button'] ); ?></button>
 			</div>
+
+			<?php if ( $args['steps'] ) : ?>
+			</fieldset>
+			<p class="faint step-foot">
+				<?php esc_html_e( 'Your details are only used to send your free redesign concept. No spam, and we do not pass them on.', 'smilecreative' ); ?>
+			</p>
+			<?php endif; ?>
 		</form>
 	</div>
 	<?php
 	return ob_get_clean();
 }
 add_shortcode( 'smile_enquiry', 'sc_enquiry_form' );
+
+/**
+ * The "what are you struggling with" options on the redesign form.
+ *
+ * Deliberately the same six Brendan already runs on the Meta funnel, because
+ * the answers arrive in the lead record and the wording is what the ad audience
+ * has already seen. Filterable so a campaign can ask something else.
+ */
+function sc_enquiry_pains() {
+	return apply_filters(
+		'sc_enquiry_pains',
+		array(
+			__( 'Outdated design', 'smilecreative' ),
+			__( 'Not enough leads or enquiries', 'smilecreative' ),
+			__( "It doesn't sound like us", 'smilecreative' ),
+			__( 'Nobody finds us on Google', 'smilecreative' ),
+			__( 'It looks wrong on phones', 'smilecreative' ),
+			__( "Other issue (we'll check for you)", 'smilecreative' ),
+		)
+	);
+}
 
 /**
  * The subject options.
@@ -218,6 +296,33 @@ function sc_enquiry_handle() {
 		'source'  => isset( $_POST['sc_source'] ) ? esc_url_raw( wp_unslash( $_POST['sc_source'] ) ) : '',
 	);
 
+	/*
+	 * The two-step redesign form asks for the web address and the pain points
+	 * before it asks who they are. Both are folded into the message rather than
+	 * given columns of their own: the table, the CSV export and the notification
+	 * email then carry them with no migration and nothing else to keep in step.
+	 */
+	$prefix = array();
+
+	$site = isset( $_POST['sc_url'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['sc_url'] ) ) ) : '';
+	if ( '' !== $site ) {
+		if ( ! preg_match( '~^https?://~i', $site ) ) {
+			$site = 'https://' . $site;   // people type their address without the scheme
+		}
+		$prefix[] = sprintf( 'Website: %s', esc_url_raw( $site ) );
+	}
+
+	$pains = isset( $_POST['sc_pain'] ) ? (array) wp_unslash( $_POST['sc_pain'] ) : array();
+	$pains = array_values( array_intersect( array_map( 'sanitize_text_field', $pains ), sc_enquiry_pains() ) );
+	if ( $pains ) {
+		$prefix[] = sprintf( 'Struggling with: %s', implode( '; ', $pains ) );
+	}
+
+	if ( $prefix ) {
+		$data['message'] = implode( "\n", $prefix )
+			. ( '' !== $data['message'] ? "\n\n" . $data['message'] : '' );
+	}
+
 	// Spam gates. Both are silent -- a bot is told it succeeded so it stops
 	// retrying, and nothing is written or sent.
 	$hp   = isset( $_POST['sc_website'] ) ? trim( wp_unslash( $_POST['sc_website'] ) ) : '';
@@ -232,13 +337,57 @@ function sc_enquiry_handle() {
 		return;
 	}
 
+	/*
+	 * Third gate, added after one got through on 8 Sep: "Williamknoli", a
+	 * telegra.ph jackpot link and nothing else. The honeypot and the time trap
+	 * both passed it, because a bot driving a real browser engine leaves the
+	 * hidden field alone and takes longer than three seconds.
+	 *
+	 * So this one reads the message instead of watching the behaviour. It is
+	 * deliberately narrow -- a link shortener or a paste site, or a message that
+	 * is little more than a wall of links. A genuine enquiry naming its own
+	 * website is not caught by either.
+	 *
+	 * It STORES the enquiry either way. Nothing decides on its own that a
+	 * customer does not exist; it only declines to put it in the inbox, and
+	 * marks it so it is obvious on the Enquiries screen.
+	 */
+	$spam_hosts = apply_filters(
+		'sc_enquiry_spam_hosts',
+		array( 'telegra.ph', 't.me', 'bit.ly', 'tinyurl.com', 'cutt.ly', 'is.gd', 'rb.gy', 'shorturl.at' )
+	);
+	$haystack = strtolower( $data['message'] . ' ' . $data['name'] );
+	$links    = preg_match_all( '~https?://~i', $data['message'] );
+	$suspect  = $links >= 3;
+	foreach ( $spam_hosts as $host ) {
+		if ( false !== strpos( $haystack, strtolower( $host ) ) ) {
+			$suspect = true;
+			break;
+		}
+	}
+
 	if ( '' === $data['name'] || ! is_email( $data['email'] ) ) {
 		$fail( __( 'Please give a name and an email address we can reply to.', 'smilecreative' ), $data );
 		return;
 	}
 
 	// ---- Store FIRST. This is the whole point of the file. ----
+	if ( $suspect ) {
+		$data['name'] = '[SPAM?] ' . $data['name'];
+	}
 	$id = sc_enquiry_store( $data );
+
+	if ( $suspect ) {
+		// Kept, visible in the admin, but not put in front of him. Told he
+		// succeeded so he stops retrying.
+		sc_enquiry_state(
+			array(
+				'type'    => 'ok',
+				'message' => sc_enquiry_thanks(),
+			)
+		);
+		return;
+	}
 
 	// ---- Then try to send. A mail failure no longer loses the enquiry. ----
 	$sent  = false;

@@ -144,3 +144,50 @@
     });
   });
 }());
+
+/* ---------------------------------------------------------------------------
+   The two-step redesign form.
+
+   Progressive enhancement, and it matters here more than usual: this form is
+   the thing paid traffic lands on. With JavaScript off, both steps are visible
+   and the form is one ordinary long form that still submits -- the Continue and
+   Back buttons are hidden by CSS until this runs and reveals them. Nobody who
+   arrives from an advert is ever met with a dead button or a step they cannot
+   get past.
+   --------------------------------------------------------------------------- */
+(function () {
+  var forms = document.querySelectorAll('form .step[data-step="1"]');
+  if (!forms.length) { return; }
+
+  Array.prototype.forEach.call(forms, function (first) {
+    var form   = first.closest('form');
+    var second = form.querySelector('.step[data-step="2"]');
+    var next   = form.querySelector('[data-step-next]');
+    var back   = form.querySelector('[data-step-back]');
+    if (!second || !next) { return; }
+
+    form.classList.add('has-steps');      // CSS reveals the nav buttons
+
+    function show(n) {
+      first.hidden  = (n !== 1);
+      second.hidden = (n !== 2);
+      if (n === 2) {
+        var f = second.querySelector('input, select, textarea');
+        if (f) { f.focus({ preventScroll: true }); }
+      }
+      // Keep the top of the form in view rather than leaving the reader
+      // halfway down a panel that just changed height.
+      var box = form.getBoundingClientRect();
+      if (box.top < 0) { form.scrollIntoView({ block: 'start', behavior: 'smooth' }); }
+    }
+
+    show(1);
+    next.addEventListener('click', function () { show(2); });
+    if (back) { back.addEventListener('click', function () { show(1); }); }
+
+    /* If the server sends the page back with an error, the visitor's details
+       are in step two -- so open there rather than making them click Continue
+       again to find out what was wrong. */
+    if (form.parentNode.querySelector('.formmsg.err')) { show(2); }
+  });
+}());

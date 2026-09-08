@@ -48,7 +48,7 @@ $sc_steps = array(
 			</div>
 		</div>
 		<div>
-			<?php echo sc_enquiry_form( array( 'id' => 'redesign', 'button' => __( 'Get my free redesign', 'smilecreative' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo sc_enquiry_form( array( 'id' => 'redesign', 'steps' => true, 'button' => __( 'Get my free redesign', 'smilecreative' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 		</div>
 	</div>
 </section>
@@ -94,7 +94,7 @@ get_template_part( 'template-parts/reviews' );
 			</div>
 		</div>
 		<div>
-			<?php echo sc_enquiry_form( array( 'id' => 'redesign2', 'button' => __( 'Get my free redesign', 'smilecreative' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo sc_enquiry_form( array( 'id' => 'redesign2', 'steps' => true, 'button' => __( 'Get my free redesign', 'smilecreative' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 		</div>
 	</div>
 </section>
