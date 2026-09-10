@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SC_VERSION', '1.6.1' );
+define( 'SC_VERSION', '1.6.2' );
 define( 'SC_DIR', get_template_directory() );
 define( 'SC_URI', get_template_directory_uri() );
 
@@ -306,3 +306,27 @@ function sc_body_class( $classes ) {
 	return $classes;
 }
 add_filter( 'body_class', 'sc_body_class', 999 ); // 999: Elementor adds its own classes at the default priority, so a filter at 10 is overwritten a moment later.
+
+/**
+ * Stop the zlib notice printing under the footer.
+ *
+ * Brendan photographed this sitting below "© 2026 Smile Creative":
+ *
+ *     ob_end_flush(): failed to send buffer of zlib output compression (1)
+ *
+ * WordPress registers wp_ob_end_flush_all() on shutdown, which walks every open
+ * output buffer and calls ob_end_flush() on each. When PHP is compressing the
+ * response itself, one of those buffers belongs to zlib and cannot be flushed by
+ * hand, so PHP raises a notice -- at shutdown, which is why it lands AFTER the
+ * closing markup rather than anywhere useful.
+ *
+ * Nothing is broken: the page has already been sent by the time this fires. But
+ * a visitor should never see the plumbing, and it only takes one plugin turning
+ * display_errors back on for a customer to get it instead of a logged-in
+ * administrator. Removing the shutdown flush is the standard cure -- PHP flushes
+ * its own buffers at the end of the request regardless.
+ */
+function sc_silence_zlib_flush_notice() {
+	remove_action( 'shutdown', 'wp_ob_end_flush_all', 1 );
+}
+add_action( 'init', 'sc_silence_zlib_flush_notice' );
