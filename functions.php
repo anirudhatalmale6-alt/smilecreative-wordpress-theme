@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SC_VERSION', '1.6.0' );
+define( 'SC_VERSION', '1.6.1' );
 define( 'SC_DIR', get_template_directory() );
 define( 'SC_URI', get_template_directory_uri() );
 
@@ -155,6 +155,35 @@ function sc_editor_assets() {
 add_action( 'after_setup_theme', 'sc_editor_assets' );
 
 /**
+ * Is Elementor currently drawing its own editor?
+ *
+ * The editor loads the page into an iframe as an ordinary front-end request --
+ * is_admin() is FALSE there -- so the shedding below stripped the very scripts
+ * the editing canvas is built from, and Elementor reported "the preview could
+ * not be loaded". My regression, introduced with the shedding on 7 Sep.
+ *
+ * Keyed on the preview parameters rather than on the user being logged in: an
+ * administrator reading the site normally should still get the fast page.
+ */
+function sc_is_builder_editing() {
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended
+	if ( isset( $_GET['elementor-preview'] ) || isset( $_GET['preview_id'] ) || isset( $_GET['elementor_library'] ) ) {
+		return true;
+	}
+	if ( isset( $_GET['action'] ) && 'elementor' === $_GET['action'] ) {
+		return true;
+	}
+	// phpcs:enable
+	if ( class_exists( '\Elementor\Plugin' )
+		&& isset( \Elementor\Plugin::$instance->preview )
+		&& method_exists( \Elementor\Plugin::$instance->preview, 'is_preview_mode' )
+		&& \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+		return true;
+	}
+	return false;
+}
+
+/**
  * Is the current view drawn entirely by this theme's own templates?
  *
  * Used to decide when the page builder's assets are dead weight. The homepage
@@ -195,7 +224,7 @@ function sc_theme_owns_view() {
  * banner, analytics, the Kira widget) is left alone deliberately.
  */
 function sc_shed_builder_assets() {
-	if ( is_admin() || ! sc_theme_owns_view() ) {
+	if ( is_admin() || ! sc_theme_owns_view() || sc_is_builder_editing() ) {
 		return;
 	}
 
